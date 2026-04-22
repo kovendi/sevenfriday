@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SevenFriday Profile</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <div class="app-stage">
+        <div id="appbar-slot"></div>
+
+        <section class="app-stage__content">
+          <section class="watch-screen profile-screen" aria-label="Profile content">
+            <header class="watch-screen__hero profile-hero">
+              <div class="profile-header">
+                <div class="profile-avatar" aria-hidden="true">
+                  <img src="./assets/avatar.png" alt="" class="profile-avatar__image" />
+                </div>
+                <div class="profile-header__copy">
+                  <h1 class="watch-screen__title" id="profile-name">Levi Kovendi</h1>
+                  <p class="watch-screen__lede">User ID: SF-2048-7712</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="watch-screen__divider"></div>
+
+            <section class="profile-section" aria-labelledby="attributes-title">
+              <h2 class="watch-screen__count" id="attributes-title">Attributes</h2>
+
+              <div class="watch-list profile-list">
+                <article class="watch-card profile-item">
+                  <div class="watch-card__image-wrap profile-item__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 3.5 19 7v6.5c0 4.2-3 6.9-7 8-4-1.1-7-3.8-7-8V7l7-3.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      <path d="M9.2 12.4 11 14.2l3.8-4.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="watch-card__content">
+                    <div class="profile-item__copy">
+                      <h3 class="watch-card__title">Administrator</h3>
+                      <div class="profile-item__meta">
+                        <span class="profile-item__meta-label profile-item__meta-label--solo">ATTRIBUTE</span>
+                      </div>
+                      <p class="watch-card__secondary">Full profile access with elevated support and management permissions.</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="watch-card profile-item">
+                  <div class="watch-card__image-wrap profile-item__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2.8 14.8 8l5.8.8-4.2 4.1 1 5.8-5.4-2.8-5.4 2.8 1-5.8-4.2-4.1 5.8-.8L12 2.8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="watch-card__content">
+                    <div class="profile-item__copy">
+                      <h3 class="watch-card__title">Top commenter</h3>
+                      <div class="profile-item__meta">
+                        <span class="profile-item__meta-label">ATTRIBUTE VALUE</span>
+                        <span class="profile-item__meta-value">5</span>
+                      </div>
+                      <p class="watch-card__secondary">Community contribution level based on post activity and reply quality.</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="watch-card profile-item">
+                  <div class="watch-card__image-wrap profile-item__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4.5 7.5 12 3l7.5 4.5V16.5L12 21l-7.5-4.5V7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                      <path d="M8 15.5V12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+                      <path d="M12 15.5V9.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+                      <path d="M16 15.5V7.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+                      <path d="M7.2 17h9.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <div class="watch-card__content">
+                    <div class="profile-item__copy">
+                      <h3 class="watch-card__title">Level</h3>
+                      <div class="profile-item__meta">
+                        <span class="profile-item__meta-label">ATTRIBUTE VALUE</span>
+                        <span class="profile-item__meta-value">10</span>
+                      </div>
+                      <p class="watch-card__secondary">Experience tier that reflects long-term engagement and consistency.</p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="profile-section" aria-labelledby="account-actions-title">
+              <h2 class="watch-screen__count" id="account-actions-title">Account actions</h2>
+
+              <div class="profile-actions">
+                <button type="button" class="profile-action profile-action--secondary" onclick="console.log('Logout')">
+                  Logout
+                </button>
+
+                <form class="profile-delete" data-component="DeleteFlow">
+                  <h3 class="watch-card__title">Delete my data</h3>
+                  <p class="watch-card__secondary">
+                    Deletion requires confirmation and a matching text input before it can continue.
+                  </p>
+
+                  <label class="profile-delete__field profile-delete__field--inline">
+                    <span class="profile-delete__label">Confirm deletion</span>
+                    <input
+                      type="checkbox"
+                      name="confirm_delete"
+                      required
+                    />
+                  </label>
+
+                  <label class="profile-delete__field">
+                    <span class="profile-delete__label">Type DELETE to confirm</span>
+                    <input
+                      type="text"
+                      name="delete_confirmation"
+                      required
+                      autocomplete="off"
+                      spellcheck="false"
+                      placeholder="DELETE"
+                      pattern="DELETE"
+                    />
+                  </label>
+
+                  <button type="submit" class="watch-detail__remove" data-action="delete-data">
+                    Delete my data
+                  </button>
+                </form>
+              </div>
+            </section>
+          </section>
+        </section>
+
+        <div id="bottom-nav-slot"></div>
+      </div>
+    </main>
+
+    <script src="./svg.js"></script>
+    <script src="./appbar.js"></script>
+    <script src="./navbar.js"></script>
+    <script>
+      const appbarSlot = document.getElementById('appbar-slot');
+      if (appbarSlot && window.renderAppBar) {
+        appbarSlot.replaceWith(window.renderAppBar('Profile'));
+      }
+
+      const bottomNavSlot = document.getElementById('bottom-nav-slot');
+      if (bottomNavSlot && window.renderNavbar) {
+        bottomNavSlot.replaceWith(window.renderNavbar());
+      }
+    </script>
+  </body>
+</html>

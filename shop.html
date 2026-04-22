@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SevenFriday Shop</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <div class="app-stage">
+        <div id="appbar-slot"></div>
+
+        <section class="app-stage__content">
+          <section class="watch-screen shop-screen" aria-label="Shop content">
+            <header class="watch-screen__hero shop-hero">
+              <div>
+                <h1 class="watch-screen__title">Shop</h1>
+                <p class="watch-screen__lede">
+                  Browse official shop sections. Each card opens an external destination, so this screen acts as an entry point only.
+                </p>
+              </div>
+            </header>
+
+            <div class="watch-screen__divider"></div>
+
+            <section class="shop-section" aria-labelledby="shop-categories-title">
+              <h2 class="watch-screen__count" id="shop-categories-title">Shop categories</h2>
+              <div id="shop-categories" class="shop-grid" data-component="ShopSection"></div>
+            </section>
+          </section>
+        </section>
+
+        <div id="bottom-nav-slot"></div>
+      </div>
+    </main>
+
+    <script src="./svg.js"></script>
+    <script src="./appbar.js"></script>
+    <script src="./navbar.js"></script>
+    <script>
+      const shopCategories = [
+        {
+          title: 'Watches',
+          subtitle: 'Explore collection',
+          href: 'https://www.sevenfriday.com/collections/watches',
+          imageAlt: 'Watch collection preview',
+          badge: 'Shop now',
+          palette: ['#d8c58a', '#8e7535', '#1a1a1a'],
+          artwork: 'watch',
+        },
+        {
+          title: 'Straps & Bracelets',
+          subtitle: 'Customize your watch',
+          href: 'https://www.sevenfriday.com/collections/straps-bracelets',
+          imageAlt: 'Straps and bracelets preview',
+          badge: 'Customize',
+          palette: ['#c7a86a', '#6e5530', '#181818'],
+          artwork: 'strap',
+        },
+        {
+          title: 'Accessories',
+          subtitle: 'Complete your setup',
+          href: 'https://www.sevenfriday.com/collections/apparel',
+          imageAlt: 'Accessories preview',
+          badge: 'Discover',
+          palette: ['#c8c8c8', '#7e7e7e', '#141414'],
+          artwork: 'accessory',
+        },
+      ];
+
+      function escapeXml(text) {
+        return String(text)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&apos;');
+      }
+
+      function createMockShopImage(title, palette, artwork = 'watch') {
+        const [accent, shadow, background] = palette;
+        const safeTitle = escapeXml(title);
+        const safeTitleUpper = escapeXml(String(title).toUpperCase());
+
+        const artworkMarkup = {
+          watch: `
+            <circle cx="160" cy="146" r="70" fill="#111111" fill-opacity="0.2" stroke="url(#glow)" stroke-width="10"/>
+            <path d="M94 198c28-36 104-36 132 0" stroke="${accent}" stroke-opacity="0.35" stroke-width="8" stroke-linecap="round"/>
+          `,
+          strap: `
+            <rect x="112" y="68" width="96" height="184" rx="24" fill="#111111" fill-opacity="0.22" stroke="url(#glow)" stroke-width="10"/>
+            <path d="M126 96h68M126 122h68M126 148h68M126 174h68M126 200h68" stroke="${accent}" stroke-opacity="0.5" stroke-width="5" stroke-linecap="round"/>
+            <path d="M124 74h72M124 246h72" stroke="${shadow}" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+          `,
+          accessory: `
+            <path d="M160 72 208 96v56c0 40-26 70-48 92-22-22-48-52-48-92V96l48-24Z" fill="#111111" fill-opacity="0.22" stroke="url(#glow)" stroke-width="10" stroke-linejoin="round"/>
+            <path d="M160 102v92M134 144h52" stroke="${accent}" stroke-opacity="0.6" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="160" cy="194" r="10" fill="${accent}" fill-opacity="0.8"/>
+          `,
+        }[artwork] || `
+          <circle cx="160" cy="146" r="70" fill="#111111" fill-opacity="0.2" stroke="url(#glow)" stroke-width="10"/>
+          <path d="M94 198c28-36 104-36 132 0" stroke="${accent}" stroke-opacity="0.35" stroke-width="8" stroke-linecap="round"/>
+        `;
+
+        const svg = `
+          <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${safeTitle}">
+            <defs>
+              <linearGradient id="bg" x1="30" y1="18" x2="290" y2="300" gradientUnits="userSpaceOnUse">
+                <stop stop-color="${background}"/>
+                <stop offset="1" stop-color="#090909"/>
+              </linearGradient>
+              <linearGradient id="glow" x1="86" y1="54" x2="236" y2="264" gradientUnits="userSpaceOnUse">
+                <stop stop-color="${accent}"/>
+                <stop offset="1" stop-color="${shadow}"/>
+              </linearGradient>
+            </defs>
+            <rect width="320" height="320" rx="34" fill="url(#bg)"/>
+            <rect x="24" y="24" width="272" height="272" rx="28" stroke="${accent}" stroke-opacity="0.16"/>
+            ${artworkMarkup}
+            <text x="160" y="164" text-anchor="middle" fill="#f5f5f5" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="800">${safeTitle}</text>
+            <text x="160" y="216" text-anchor="middle" fill="${accent}" font-size="12" font-family="Arial, Helvetica, sans-serif" letter-spacing="3">${safeTitleUpper}</text>
+          </svg>
+        `.trim();
+
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      }
+
+      function createShopCard(item) {
+        const card = document.createElement('a');
+        card.className = 'watch-card shop-card';
+        card.href = item.href;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.setAttribute('aria-label', `${item.title}. Open external shop section`);
+
+        card.innerHTML = `
+          <div class="watch-card__image-wrap shop-card__image-wrap">
+          <img class="watch-card__image" src="${createMockShopImage(item.title, item.palette, item.artwork)}" alt="${escapeXml(item.imageAlt)}" />
+        </div>
+          <div class="watch-card__content">
+            <div>
+              <h3 class="watch-card__title">${escapeXml(item.title)}</h3>
+              <p class="watch-card__secondary shop-card__secondary">${escapeXml(item.subtitle)}</p>
+            </div>
+            <div class="watch-card__footer">
+              <span class="watch-card__tag shop-card__tag">${escapeXml(item.badge)}</span>
+              <span class="watch-card__chevron" aria-hidden="true">↗</span>
+            </div>
+          </div>
+        `;
+
+        return card;
+      }
+
+      function renderShopSection(root) {
+        root.innerHTML = '';
+        shopCategories.forEach((item) => {
+          root.appendChild(createShopCard(item));
+        });
+      }
+
+      const bottomNavSlot = document.getElementById('bottom-nav-slot');
+      const appbarSlot = document.getElementById('appbar-slot');
+      const shopCategoriesRoot = document.getElementById('shop-categories');
+
+      if (appbarSlot && window.renderAppBar) {
+        appbarSlot.replaceWith(window.renderAppBar('Shop'));
+      }
+
+      if (shopCategoriesRoot) {
+        renderShopSection(shopCategoriesRoot);
+      }
+
+      if (bottomNavSlot && window.renderNavbar) {
+        bottomNavSlot.replaceWith(window.renderNavbar({ activeKey: 'shop' }));
+      }
+    </script>
+  </body>
+</html>
