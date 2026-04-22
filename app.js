@@ -78,6 +78,11 @@ function getRandomItem(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+function getAvailableModels() {
+  const registeredCodes = new Set(state.watches.map((watch) => watch.modelCode));
+  return MODEL_LIBRARY.filter((model) => !registeredCodes.has(model.modelCode));
+}
+
 function createId() {
   if (window.crypto && typeof window.crypto.randomUUID === 'function') {
     return window.crypto.randomUUID();
@@ -132,8 +137,7 @@ function getPalette(modelCode) {
   };
 }
 
-function createMockWatch() {
-  const model = getRandomItem(MODEL_LIBRARY);
+function createMockWatch(model = getRandomItem(MODEL_LIBRARY)) {
   const year = 2021 + Math.floor(Math.random() * 5);
   const palette = getPalette(model.modelCode);
 
@@ -513,7 +517,15 @@ function handleRegisterWatch(event) {
   console.log('Simulating NFC scan...');
 
   window.setTimeout(() => {
-    const watch = createMockWatch();
+    const availableModels = getAvailableModels();
+    if (availableModels.length === 0) {
+      state.isRegistering = false;
+      render();
+      console.warn('No unregistered watch models left to add');
+      return;
+    }
+
+    const watch = createMockWatch(getRandomItem(availableModels));
     state.watches = [watch, ...state.watches];
     state.isRegistering = false;
     saveWatches(state.watches);
