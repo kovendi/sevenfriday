@@ -29,8 +29,9 @@ body {
 
 body {
   min-height: 100dvh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 12px;
   background:
     radial-gradient(circle at top, rgba(216, 195, 91, 0.12), transparent 36%),
@@ -63,9 +64,10 @@ img {
 }
 
 .app-shell {
-  width: min(414px, calc(100vw - 24px), calc((100dvh - 24px) * 414 / 868));
-  aspect-ratio: 414 / 868;
-  min-height: 0;
+  width: 414px;
+  min-width: 414px;
+  height: 868px;
+  min-height: 868px;
   padding: 12px;
   display: flex;
   justify-content: center;
