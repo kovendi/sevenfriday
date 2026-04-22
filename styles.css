@@ -64,10 +64,9 @@ img {
 }
 
 .app-shell {
-  width: 414px;
-  min-width: 414px;
-  height: 868px;
-  min-height: 868px;
+  width: min(414px, calc(100vw - 24px), calc((100dvh - 24px) * 414 / 868));
+  aspect-ratio: 414 / 868;
+  min-height: 0;
   padding: 12px;
   display: flex;
   justify-content: center;
