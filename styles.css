@@ -29,9 +29,8 @@ body {
 
 body {
   min-height: 100dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
   padding: 12px;
   background:
     radial-gradient(circle at top, rgba(216, 195, 91, 0.12), transparent 36%),
