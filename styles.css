@@ -862,13 +862,16 @@ img {
 }
 
 .profile-name-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  display: grid;
   gap: 12px;
 }
 
+.profile-name-row .watch-screen__title {
+  min-width: 0;
+}
+
 .profile-name-edit {
+  justify-self: start;
   appearance: none;
   border: 1px solid rgba(216, 195, 91, 0.24);
   background: rgba(216, 195, 91, 0.08);
