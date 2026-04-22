@@ -19,7 +19,37 @@
                   <img src="./assets/avatar.png" alt="" class="profile-avatar__image" />
                 </div>
                 <div class="profile-header__copy">
-                  <h1 class="watch-screen__title" id="profile-name">Levi Kovendi</h1>
+                  <div class="profile-name-row">
+                    <h1 class="watch-screen__title" id="profile-name">Michael Johnson</h1>
+                    <button
+                      type="button"
+                      class="profile-name-edit"
+                      id="profile-edit-trigger"
+                      aria-controls="profile-name-form"
+                      aria-expanded="false"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  <form class="profile-name-form" id="profile-name-form" hidden>
+                    <label class="profile-name-form__field" for="profile-name-input">
+                      <span class="profile-delete__label">Username</span>
+                      <input
+                        type="text"
+                        id="profile-name-input"
+                        name="username"
+                        autocomplete="username"
+                        required
+                      />
+                    </label>
+                    <div class="profile-name-form__actions">
+                      <button type="submit" class="profile-action">Save</button>
+                      <button type="button" class="profile-action profile-action--secondary" id="profile-name-cancel">
+                        Cancel
+                      </button>
+                    </div>
+                    <p class="profile-name-form__hint" id="profile-name-feedback" aria-live="polite" hidden></p>
+                  </form>
                   <p class="watch-screen__lede">User ID: SF-2048-7712</p>
                 </div>
               </div>
@@ -144,6 +174,44 @@
     <script src="./appbar.js"></script>
     <script src="./navbar.js"></script>
     <script>
+      const MAX_USERNAME_LENGTH = 24;
+      const PROFILE_STORAGE_KEY = 'sevenfriday.profile.v1';
+
+      function normalizeUsername(value) {
+        return String(value || '')
+          .trim()
+          .replace(/\s+/g, ' ')
+          .slice(0, MAX_USERNAME_LENGTH);
+      }
+
+      function loadProfile() {
+        try {
+          const raw = window.localStorage.getItem(PROFILE_STORAGE_KEY);
+          if (!raw) {
+            return { username: 'Michael Johnson' };
+          }
+
+          const parsed = JSON.parse(raw);
+          if (!parsed || typeof parsed.username !== 'string') {
+            return { username: 'Michael Johnson' };
+          }
+
+          return { username: normalizeUsername(parsed.username) || 'Michael Johnson' };
+        } catch (error) {
+          console.warn('Unable to load profile data', error);
+          return { username: 'Michael Johnson' };
+        }
+      }
+
+      function saveProfile(profile) {
+        try {
+          window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+        } catch (error) {
+          console.warn('Unable to save profile data', error);
+        }
+      }
+
+      const profileState = loadProfile();
       const appbarSlot = document.getElementById('appbar-slot');
       if (appbarSlot && window.renderAppBar) {
         appbarSlot.replaceWith(window.renderAppBar('Profile'));
@@ -152,6 +220,82 @@
       const bottomNavSlot = document.getElementById('bottom-nav-slot');
       if (bottomNavSlot && window.renderNavbar) {
         bottomNavSlot.replaceWith(window.renderNavbar());
+      }
+
+      const profileName = document.getElementById('profile-name');
+      const profileEditTrigger = document.getElementById('profile-edit-trigger');
+      const profileNameForm = document.getElementById('profile-name-form');
+      const profileNameInput = document.getElementById('profile-name-input');
+      const profileNameCancel = document.getElementById('profile-name-cancel');
+      const profileNameFeedback = document.getElementById('profile-name-feedback');
+
+      function renderProfileName() {
+        if (profileName) {
+          profileName.textContent = profileState.username;
+        }
+      }
+
+      function setFeedback(message) {
+        if (profileNameFeedback) {
+          profileNameFeedback.textContent = message;
+          profileNameFeedback.hidden = !message;
+        }
+      }
+
+      function openNameEditor() {
+        if (!profileNameForm || !profileNameInput || !profileEditTrigger) {
+          return;
+        }
+
+        profileNameForm.hidden = false;
+        profileEditTrigger.setAttribute('aria-expanded', 'true');
+        profileNameInput.value = profileState.username;
+        profileNameInput.maxLength = MAX_USERNAME_LENGTH;
+        setFeedback('');
+        profileNameInput.focus();
+        profileNameInput.select();
+      }
+
+      function closeNameEditor() {
+        if (!profileNameForm || !profileEditTrigger) {
+          return;
+        }
+
+        profileNameForm.hidden = true;
+        profileEditTrigger.setAttribute('aria-expanded', 'false');
+      }
+
+      renderProfileName();
+
+      if (profileEditTrigger) {
+        profileEditTrigger.addEventListener('click', openNameEditor);
+      }
+
+      if (profileNameCancel) {
+        profileNameCancel.addEventListener('click', closeNameEditor);
+      }
+
+      if (profileNameForm) {
+        profileNameForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          if (!profileNameInput) {
+            return;
+          }
+
+          const nextUsername = normalizeUsername(profileNameInput.value);
+          if (!nextUsername) {
+            setFeedback('Username is required.');
+            profileNameInput.focus();
+            return;
+          }
+
+          profileState.username = nextUsername;
+          saveProfile(profileState);
+          renderProfileName();
+          closeNameEditor();
+          setFeedback('Username updated.');
+        });
       }
     </script>
   </body>

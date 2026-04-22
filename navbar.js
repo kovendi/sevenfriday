@@ -9,7 +9,7 @@ const navItems = [
     key: 'community',
     label: 'Community',
     icon: window.SFIcons.community,
-    href: 'https://www.google.com/',
+    href: 'https://icnivad.space',
     target: '_blank',
     rel: 'noopener noreferrer',
   },
@@ -39,7 +39,7 @@ function getCurrentNavKey(pathname = window.location.pathname) {
     return 'shop';
   }
 
-  if (page === 'watch-manager.html' || page === 'index.html' || page === '') {
+  if (page === 'index.html' || page === '') {
     return 'watch';
   }
 

@@ -262,6 +262,21 @@ function removeWatch(watchId) {
   render();
 }
 
+function confirmWatchRemoval(watch) {
+  if (typeof window.showConfirmDialog !== 'function') {
+    return Promise.resolve(window.confirm(`Remove ${watch.modelName} from your watches?`));
+  }
+
+  return window.showConfirmDialog({
+    eyebrow: 'Remove watch',
+    title: `Remove ${watch.modelName}?`,
+    message: 'This watch will be removed from your collection view immediately.',
+    confirmLabel: 'Remove',
+    cancelLabel: 'Keep watch',
+    tone: 'danger',
+  });
+}
+
 window.handleWatchManagerBack = function handleWatchManagerBack() {
   if (state.selectedWatchId) {
     closeWatchDetails();
@@ -380,7 +395,12 @@ function createWatchDetailView(watch) {
   removeButton.type = 'button';
   removeButton.className = 'watch-detail__remove';
   removeButton.textContent = 'Remove watch';
-  removeButton.addEventListener('click', () => {
+  removeButton.addEventListener('click', async () => {
+    const isConfirmed = await confirmWatchRemoval(watch);
+    if (!isConfirmed) {
+      return;
+    }
+
     console.log('Remove watch', watch);
     removeWatch(watch.id);
   });
@@ -414,21 +434,17 @@ function createEmptyState() {
   iconWrap.setAttribute('aria-hidden', 'true');
   iconWrap.innerHTML = window.SFIcons?.watch || '';
 
-  const eyebrow = document.createElement('p');
-  eyebrow.className = 'watch-empty__eyebrow';
-  eyebrow.textContent = 'VAULT STATUS';
-
   const title = document.createElement('h1');
   title.className = 'watch-empty__title';
-  title.textContent = 'No watches locked in yet';
+  title.textContent = 'No watches added';
 
   const text = document.createElement('p');
   text.className = 'watch-empty__text';
-  text.textContent = 'Add your first SevenFriday and turn this empty vault into a live collection.';
+  text.textContent = 'Add your first SevenFriday watch and get rewarded for your personal SevenFriday watch collection';
 
   const hint = document.createElement('p');
   hint.className = 'watch-empty__hint';
-  hint.textContent = 'One registration unlocks tracking, ownership history, and detail views.';
+  hint.textContent = 'One registration unlocks tracking, ownership history, and detail views';
 
   const actionWrap = document.createElement('div');
   actionWrap.className = 'watch-empty__action';
@@ -436,7 +452,7 @@ function createEmptyState() {
   const button = createPrimaryButton('Register your first watch', handleRegisterWatch, state.isRegistering);
   actionWrap.appendChild(button);
 
-  panel.append(iconWrap, eyebrow, title, text, hint, actionWrap);
+  panel.append(iconWrap, title, text, hint, actionWrap);
   empty.appendChild(panel);
   return empty;
 }

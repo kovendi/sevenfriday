@@ -5,6 +5,8 @@
   --border: #2a2a2a;
   --accent: #d8c35b;
   --accent-soft: rgba(216, 195, 91, 0.16);
+  --paper: #ddd4c2;
+  --paper-deep: #cdbfa9;
   --text: #ffffff;
   --text-secondary: #bfbfbf;
   --text-muted: #8a8a8a;
@@ -415,8 +417,9 @@ img {
 .watch-detail__image-wrap {
   border-radius: 26px;
   overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background:
+    radial-gradient(circle at top, rgba(239, 231, 217, 0.98), rgba(221, 211, 194, 0.98) 62%, var(--paper-deep) 100%);
   box-shadow: var(--shadow);
 }
 
@@ -619,7 +622,7 @@ img {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.04);
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.94), rgba(245, 242, 233, 0.98) 62%, rgba(235, 230, 220, 1) 100%);
+    radial-gradient(circle at top, rgba(239, 231, 217, 0.98), rgba(221, 211, 194, 0.98) 62%, var(--paper-deep) 100%);
   aspect-ratio: 1 / 1;
 }
 
@@ -830,6 +833,7 @@ img {
 }
 
 .profile-avatar {
+  flex: 0 0 96px;
   width: 96px;
   height: 126px;
   border-radius: 16px;
@@ -853,7 +857,82 @@ img {
 }
 
 .profile-header__copy {
+  flex: 1 1 auto;
   min-width: 0;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile-name-edit {
+  appearance: none;
+  border: 1px solid rgba(216, 195, 91, 0.24);
+  background: rgba(216, 195, 91, 0.08);
+  color: var(--accent);
+  border-radius: 999px;
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.profile-name-edit:hover {
+  border-color: rgba(216, 195, 91, 0.42);
+  background: rgba(216, 195, 91, 0.14);
+}
+
+.profile-name-edit:active {
+  transform: translateY(1px);
+}
+
+.profile-name-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.profile-name-form[hidden] {
+  display: none;
+}
+
+.profile-name-form__field {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-name-form__field input {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.profile-name-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.profile-name-form__hint {
+  margin: 0;
+  min-height: 18px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .profile-section {
@@ -1055,11 +1134,14 @@ img {
 
 .shop-card__image-wrap {
   aspect-ratio: 1 / 1;
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), rgba(17, 17, 17, 1) 70%);
+  background:
+    radial-gradient(circle at top, rgba(239, 231, 217, 0.98), rgba(221, 211, 194, 0.98) 62%, var(--paper-deep) 100%);
 }
 
 .shop-card__image-wrap img {
-  object-fit: cover;
+  box-sizing: border-box;
+  object-fit: contain;
+  padding: 8px;
 }
 
 .shop-card__secondary {
@@ -1079,6 +1161,147 @@ img {
   border-radius: 999px;
   background: currentColor;
   opacity: 0.8;
+}
+
+.confirm-dialog {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(11, 11, 11, 0.44);
+  backdrop-filter: blur(14px) saturate(1.1);
+  animation: confirm-dialog-fade 180ms ease;
+}
+
+.confirm-dialog__panel {
+  width: min(100%, 270px);
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06)),
+    rgba(28, 28, 30, 0.82);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.42),
+    0 1px 0 rgba(255, 255, 255, 0.12) inset;
+  backdrop-filter: blur(24px) saturate(1.15);
+  animation: confirm-dialog-pop 220ms cubic-bezier(.2, .9, .22, 1);
+}
+
+.confirm-dialog__halo {
+  position: absolute;
+  inset: -42% auto auto 50%;
+  width: 180px;
+  height: 180px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%);
+  pointer-events: none;
+}
+
+.confirm-dialog__header {
+  position: relative;
+  padding: 18px 18px 14px;
+  display: grid;
+  gap: 8px;
+  text-align: center;
+}
+
+.confirm-dialog__eyebrow {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.confirm-dialog__title {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 17px;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.confirm-dialog__message {
+  margin: 0;
+  color: rgba(235, 235, 245, 0.72);
+  font-size: 13px;
+  line-height: 1.38;
+}
+
+.confirm-dialog__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.confirm-dialog__button {
+  appearance: none;
+  min-height: 44px;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  padding: 10px 14px;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+
+.confirm-dialog__button:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.confirm-dialog__button--secondary {
+  background: transparent;
+  color: rgba(10, 132, 255, 0.96);
+}
+
+.confirm-dialog__button--secondary:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.confirm-dialog__button--danger {
+  background: transparent;
+  color: #ff453a;
+  font-weight: 600;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.confirm-dialog__button--danger:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+@keyframes confirm-dialog-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes confirm-dialog-pop {
+  from {
+    opacity: 0;
+    transform: scale(1.08) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @media (min-width: 430px) {
